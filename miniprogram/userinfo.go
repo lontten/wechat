@@ -28,6 +28,10 @@ type Watermark struct {
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
 func (p MiniProgramConfig) GetPhoneNumber(req GetPhoneNumberReq) (GetPhoneNumberResp, error) {
 	url := "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
-	url += "?access_token=" + p.AccessToken
+	accessToken, err := p.GetAccessTokenCache()
+	if err != nil {
+		return GetPhoneNumberResp{}, err
+	}
+	url += "?access_token=" + accessToken
 	return lcore.PostJson[GetPhoneNumberResp](url, req)
 }

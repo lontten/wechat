@@ -4,12 +4,6 @@ import (
 	"github.com/lontten/lcore/v2"
 )
 
-type MiniProgramConfig struct {
-	Appid  string `json:"appid"`  // 小程序 appId
-	Secret string `json:"secret"` // 小程序 appSecret
-
-	AccessToken string `json:"access_token"` // 接口调用凭证
-}
 type Code2SessionReq struct {
 	JsCode    string `json:"jsCode"`    // 登录时获取的 code，可通过wx.login获取
 	GrantType string `json:"grantType"` // 授权类型，此处只需填写 authorization_code
