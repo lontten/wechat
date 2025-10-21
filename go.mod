@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/dgraph-io/ristretto v0.2.0
-	github.com/lontten/lcore/v2 v2.2.0
+	github.com/lontten/lcore/v2 v2.2.1
 )
 
 require (

@@ -36,7 +36,7 @@ func (p MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccess
 		url += "&force_refresh=true"
 	}
 
-	return lcore.Get[GetAccessTokenResp](url)
+	return lcore.PostJson[GetAccessTokenResp](url, nil)
 }
 
 func (p MiniProgramConfig) GetAccessTokenCache() (string, error) {
