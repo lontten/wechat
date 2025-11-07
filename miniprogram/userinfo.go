@@ -5,8 +5,8 @@ import (
 )
 
 type GetPhoneNumberReq struct {
-	Code   string `json:"code"`   // 前端通过<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> 获取
-	OpenID string `json:"openid"` // 用户唯一标识，非必填
+	Code   string `json:"code"`
+	OpenID string `json:"openid"`
 }
 type GetPhoneNumberResp struct {
 	ErrMsg    string    `json:"errmsg"`     // 错误信息，请求失败时返回
@@ -27,13 +27,21 @@ type Watermark struct {
 
 // GetPhoneNumber 获取手机号
 // 该接口用于将code换取用户手机号。 说明，每个code只能使用一次，code的有效期为5min。
+// code 前端通过<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> 获取
+// openid 选填，有开发者反馈，传入 openid 后反而报格式错误。建议不填。
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
-func (p MiniProgramConfig) GetPhoneNumber(req GetPhoneNumberReq) (GetPhoneNumberResp, error) {
+func (p MiniProgramConfig) GetPhoneNumber(code string, openid ...string) (GetPhoneNumberResp, error) {
 	url := "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
 	accessToken, err := p.GetAccessTokenCache()
 	if err != nil {
 		return GetPhoneNumberResp{}, err
 	}
 	url += "?access_token=" + accessToken
-	return netutil.PostJson[GetPhoneNumberResp](url, req)
+	var data = GetPhoneNumberReq{
+		Code: code,
+	}
+	if len(openid) > 0 {
+		data.OpenID = openid[0]
+	}
+	return netutil.PostJson[GetPhoneNumberResp](url, data)
 }
