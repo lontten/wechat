@@ -1,7 +1,7 @@
 package miniprogram
 
 import (
-	"github.com/lontten/lcore/v2"
+	"github.com/lontten/lcore/v2/netutil"
 )
 
 type Code2SessionResp struct {
@@ -21,5 +21,5 @@ func (p MiniProgramConfig) Code2Session(code string) (Code2SessionResp, error) {
 	url += "&js_code=" + code
 	url += "&grant_type=" + "authorization_code"
 
-	return lcore.Get[Code2SessionResp](url)
+	return netutil.Get[Code2SessionResp](url)
 }

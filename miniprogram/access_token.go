@@ -1,7 +1,7 @@
 package miniprogram
 
 import (
-	"github.com/lontten/lcore/v2"
+	"github.com/lontten/lcore/v2/netutil"
 )
 
 type GetAccessTokenResp struct {
@@ -18,7 +18,7 @@ func (p MiniProgramConfig) GetAccessToken() (GetAccessTokenResp, error) {
 	url += "?appid=" + p.Appid
 	url += "&secret=" + p.Secret
 
-	return lcore.Get[GetAccessTokenResp](url)
+	return netutil.Get[GetAccessTokenResp](url)
 }
 
 // GetStableAccessToken 获取稳定版接口调用凭据
@@ -36,7 +36,7 @@ func (p MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccess
 		url += "&force_refresh=true"
 	}
 
-	return lcore.PostJson[GetAccessTokenResp](url, nil)
+	return netutil.PostJson[GetAccessTokenResp](url, nil)
 }
 
 func (p MiniProgramConfig) GetAccessTokenCache() (string, error) {

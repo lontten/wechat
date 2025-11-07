@@ -1,6 +1,8 @@
 package miniprogram
 
-import "github.com/lontten/lcore/v2"
+import (
+	"github.com/lontten/lcore/v2/netutil"
+)
 
 type GetPhoneNumberReq struct {
 	Code   string `json:"code"`   // 前端通过<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> 获取
@@ -33,5 +35,5 @@ func (p MiniProgramConfig) GetPhoneNumber(req GetPhoneNumberReq) (GetPhoneNumber
 		return GetPhoneNumberResp{}, err
 	}
 	url += "?access_token=" + accessToken
-	return lcore.PostJson[GetPhoneNumberResp](url, req)
+	return netutil.PostJson[GetPhoneNumberResp](url, req)
 }
