@@ -14,8 +14,8 @@ type GetAccessTokenResp struct {
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getAccessToken.html
 func (p MiniProgramConfig) GetAccessToken() (GetAccessTokenResp, error) {
 	url := "https://api.weixin.qq.com/cgi-bin/token"
-	url += "&grant_type=" + "client_credential"
 	url += "?appid=" + p.Appid
+	url += "&grant_type=" + "client_credential"
 	url += "&secret=" + p.Secret
 
 	return netutil.Get[GetAccessTokenResp](url)
@@ -29,8 +29,8 @@ func (p MiniProgramConfig) GetAccessToken() (GetAccessTokenResp, error) {
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getStableAccessToken.html
 func (p MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccessTokenResp, error) {
 	url := "https://api.weixin.qq.com/cgi-bin/stable_token"
-	url += "&grant_type=" + "client_credential"
 	url += "?appid=" + p.Appid
+	url += "&grant_type=" + "client_credential"
 	url += "&secret=" + p.Secret
 	if len(forceRefresh) > 0 && forceRefresh[0] {
 		url += "&force_refresh=true"
