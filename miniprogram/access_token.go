@@ -17,45 +17,51 @@ type GetAccessTokenResp struct {
 // GetAccessToken 获取接口调用凭据
 // 获取小程序全局唯一后台接口调用凭据，token有效期为7200s，开发者需要进行妥善保存
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getAccessToken.html
-func (p MiniProgramConfig) GetAccessToken() (GetAccessTokenResp, error) {
+func (c MiniProgramConfig) GetAccessToken() (GetAccessTokenResp, error) {
 	url := "https://api.weixin.qq.com/cgi-bin/token"
-	url += "?appid=" + p.Appid
+	url += "?appid=" + c.Appid
 	url += "&grant_type=" + "client_credential"
-	url += "&secret=" + p.Secret
+	url += "&secret=" + c.Secret
 
 	return netutil.Get[GetAccessTokenResp](url)
 }
 
-// GetStableAccessToken 获取稳定版接口调用凭据
-// 获取小程序全局唯一后台接口调用凭据，token有效期为7200s，开发者需要进行妥善保存
-// forceRefresh 默认使用 false。
-// 1. force_refresh = false 时为普通调用模式，access_token 有效期内重复调用该接口不会更新 access_token；
-// 2. 当force_refresh = true 时为强制刷新模式，会导致上次获取的 access_token 失效，并返回新的 access_token
-// https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getStableAccessToken.html
-func (p MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccessTokenResp, error) {
-	url := "https://api.weixin.qq.com/cgi-bin/stable_token"
-	url += "?appid=" + p.Appid
-	url += "&grant_type=" + "client_credential"
-	url += "&secret=" + p.Secret
-	if len(forceRefresh) > 0 && forceRefresh[0] {
-		url += "&force_refresh=true"
-	}
-
-	return netutil.PostJson[GetAccessTokenResp](url, nil)
+type GetStableAccessTokenReq struct {
+	Appid     string `json:"appid"`      // 小程序 appId
+	Secret    string `json:"secret"`     // 小程序 appSecret
+	GrantType string `json:"grant_type"` // 填写 client_credential
+	// 默认使用 false。
+	// 1. force_refresh = false 时为普通调用模式，access_token 有效期内重复调用该接口不会更新 access_token；
+	// 2. 当force_refresh = true 时为强制刷新模式，会导致上次获取的 access_token 失效，并返回新的 access_token
+	ForceRefresh bool `json:"force_refresh"` //
 }
 
-func (p MiniProgramConfig) GetAccessTokenCache() (string, error) {
-	v, ok := p.Get(p.CacheKeyAccessToken())
+// GetStableAccessToken 获取稳定版接口调用凭据
+// 获取小程序全局唯一后台接口调用凭据，token有效期为7200s，开发者需要进行妥善保存
+// https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-access-token/getStableAccessToken.html
+func (c MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccessTokenResp, error) {
+	url := "https://api.weixin.qq.com/cgi-bin/stable_token"
+	var data = GetStableAccessTokenReq{
+		Appid:        c.Appid,
+		Secret:       c.Secret,
+		GrantType:    "client_credential",
+		ForceRefresh: false,
+	}
+	return netutil.PostJson[GetAccessTokenResp](url, data)
+}
+
+func (c MiniProgramConfig) GetAccessTokenCache() (string, error) {
+	v, ok := c.Get(c.CacheKeyAccessToken())
 	if ok {
 		return v.(string), nil
 	}
-	token, err := p.GetStableAccessToken()
+	token, err := c.GetStableAccessToken()
 	if err != nil {
 		return "", err
 	}
 	if token.ErrCode != 0 {
 		return "", fmt.Errorf("GetStableAccessToken,err:%v", token)
 	}
-	p.SetExpire(p.CacheKeyAccessToken(), token.AccessToken, int64(token.ExpiresIn)-200)
+	c.SetExpire(c.CacheKeyAccessToken(), token.AccessToken, int64(token.ExpiresIn)-200)
 	return token.AccessToken, nil
 }

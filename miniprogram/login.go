@@ -15,10 +15,10 @@ type Code2SessionResp struct {
 
 // Code2Session 登录凭证校验。通过 wx.login 接口获得临时登录凭证 code 后传到开发者服务器调用此接口完成登录流程
 // https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
-func (p MiniProgramConfig) Code2Session(code string) (Code2SessionResp, error) {
+func (c MiniProgramConfig) Code2Session(code string) (Code2SessionResp, error) {
 	url := "https://api.weixin.qq.com/sns/jscode2session"
-	url += "?appid=" + p.Appid
-	url += "&secret=" + p.Secret
+	url += "?appid=" + c.Appid
+	url += "&secret=" + c.Secret
 	url += "&js_code=" + code
 	url += "&grant_type=" + "authorization_code"
 

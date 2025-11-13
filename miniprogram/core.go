@@ -16,17 +16,17 @@ func MiniProgram(mpc MiniProgramConfig) MiniProgramConfig {
 	return mpc
 }
 
-func (mp MiniProgramConfig) CacheKeyAccessToken() string {
-	return "miniprogram_access_token_" + mp.Appid
+func (c MiniProgramConfig) CacheKeyAccessToken() string {
+	return "miniprogram_access_token_" + c.Appid
 }
 
-func (mp MiniProgramConfig) Get(key string) (any, bool) {
-	v, ok := mp.Cache.Get(key)
+func (c MiniProgramConfig) Get(key string) (any, bool) {
+	v, ok := c.Cache.Get(key)
 	return v, ok
 }
-func (mp MiniProgramConfig) Set(key string, v any) {
-	mp.Cache.Set(key, v)
+func (c MiniProgramConfig) Set(key string, v any) {
+	c.Cache.Set(key, v)
 }
-func (mp MiniProgramConfig) SetExpire(key string, v any, expire int64) {
-	mp.Cache.SetExpire(key, v, expire)
+func (c MiniProgramConfig) SetExpire(key string, v any, expire int64) {
+	c.Cache.SetExpire(key, v, expire)
 }

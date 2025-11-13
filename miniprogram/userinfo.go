@@ -30,9 +30,9 @@ type Watermark struct {
 // code 前端通过<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> 获取
 // openid 选填，有开发者反馈，传入 openid 后反而报格式错误。建议不填。
 // https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/user-info/phone-number/getPhoneNumber.html
-func (p MiniProgramConfig) GetPhoneNumber(code string, openid ...string) (GetPhoneNumberResp, error) {
+func (c MiniProgramConfig) GetPhoneNumber(code string, openid ...string) (GetPhoneNumberResp, error) {
 	url := "https://api.weixin.qq.com/wxa/business/getuserphonenumber"
-	accessToken, err := p.GetAccessTokenCache()
+	accessToken, err := c.GetAccessTokenCache()
 	if err != nil {
 		return GetPhoneNumberResp{}, err
 	}
