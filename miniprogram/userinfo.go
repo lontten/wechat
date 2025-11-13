@@ -9,10 +9,10 @@ type GetPhoneNumberReq struct {
 	OpenID string `json:"openid"`
 }
 type GetPhoneNumberResp struct {
-	ErrMsg    string    `json:"errmsg"`     // 错误信息，请求失败时返回
-	ErrCode   int       `json:"errcode"`    // 错误码，请求失败时返回, 0 表示成功
-	PhoneInfo PhoneInfo `json:"phone_info"` // 用户手机号信息
+	ErrCode int    `json:"errcode"` // 错误码，请求失败时返回, 0 表示成功
+	ErrMsg  string `json:"errmsg"`  // 错误信息，请求失败时返回
 
+	PhoneInfo PhoneInfo `json:"phone_info"` // 用户手机号信息
 }
 type PhoneInfo struct {
 	PhoneNumber     string    `json:"phoneNumber"`     // 用户绑定的手机号（国外手机号会有区号）
@@ -36,6 +36,7 @@ func (p MiniProgramConfig) GetPhoneNumber(code string, openid ...string) (GetPho
 	if err != nil {
 		return GetPhoneNumberResp{}, err
 	}
+
 	url += "?access_token=" + accessToken
 	var data = GetPhoneNumberReq{
 		Code: code,

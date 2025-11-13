@@ -1,10 +1,15 @@
 package miniprogram
 
 import (
+	"fmt"
+
 	"github.com/lontten/lcore/v2/netutil"
 )
 
 type GetAccessTokenResp struct {
+	ErrCode int    `json:"errcode"` // 错误码，请求失败时返回, 0 表示成功
+	ErrMsg  string `json:"errmsg"`  // 错误信息，请求失败时返回
+
 	AccessToken string `json:"access_token"` // 接口调用凭证
 	ExpiresIn   int    `json:"expires_in"`   // 凭证有效时间，单位：秒。目前是7200秒之内的值
 }
@@ -47,6 +52,9 @@ func (p MiniProgramConfig) GetAccessTokenCache() (string, error) {
 	token, err := p.GetStableAccessToken()
 	if err != nil {
 		return "", err
+	}
+	if token.ErrCode != 0 {
+		return "", fmt.Errorf("GetStableAccessToken,err:%v", token)
 	}
 	p.SetExpire(p.CacheKeyAccessToken(), token.AccessToken, int64(token.ExpiresIn)-200)
 	return token.AccessToken, nil
