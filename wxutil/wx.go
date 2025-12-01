@@ -12,9 +12,14 @@ func GenWxTimestampNow() string {
 	return strconv.FormatInt(time.Now().Unix(), 10)
 }
 
-// 微信支付 金额转字符串
-func WxMoneyToFen(m decimal.Decimal) string {
+// WxMoneyToFenStr 微信支付 金额转字符串
+func WxMoneyToFenStr(m decimal.Decimal) string {
 	return m.Mul(decimal.NewFromInt(100)).String()
+}
+
+// 微信支付 金额转字符串
+func WxMoneyToFen(m decimal.Decimal) int64 {
+	return m.Mul(decimal.NewFromInt(100)).IntPart()
 }
 
 // 微信支付 金额字符串转金额

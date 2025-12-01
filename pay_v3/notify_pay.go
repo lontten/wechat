@@ -1,4 +1,4 @@
-package mp_pay
+package pay_v3
 
 import (
 	"context"
@@ -15,8 +15,8 @@ type NotifyService struct {
 	client *notify.Handler
 }
 
-// NotifyClient 回调通知 通用
-func (pc PayConfig) NotifyClient() (NotifyService, error) {
+// GetNotifyClient 回调通知 通用
+func (pc PayConfig) GetNotifyClient() (NotifyService, error) {
 	var payService NotifyService
 	// 3. 创建证书访问器和验证器
 	certVisitor := downloader.MgrInstance().GetCertificateVisitor(pc.Mchid)

@@ -1,4 +1,4 @@
-package mp_pay
+package pay_v3
 
 import (
 	"github.com/wechatpay-apiv3/wechatpay-go/services/partnerpayments/app"
@@ -9,7 +9,7 @@ type AppPayService struct {
 }
 
 // APP支付,调用 微信APP 支付
-func (pc PayConfig) AppPayClient() (AppPayService, error) {
+func (pc PayConfig) GetAppPayClient() (AppPayService, error) {
 	var payService AppPayService
 	err := pc.InitClient()
 	if err != nil {

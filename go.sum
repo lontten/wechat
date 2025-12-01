@@ -12,6 +12,8 @@ github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkp
 github.com/dustin/go-humanize v1.0.1/go.mod h1:Mu1zIs6XwVuF/gI1OepvI0qD18qycQx+mFykh5fBlto=
 github.com/lontten/lcore/v2 v2.7.0 h1:LfIqUnPzL65BXibporWYPAUAogd5GInXuss+vMNMeU8=
 github.com/lontten/lcore/v2 v2.7.0/go.mod h1:4Ko2Fryk9BW6NsXY8dDkuQjcQQwrhry1GFQyUptNp1M=
+github.com/lontten/lcore/v2 v2.12.1 h1:MQADEntSCIOQg3MtW72Dhi3qiwGSodCVyW+8xg6L/Qs=
+github.com/lontten/lcore/v2 v2.12.1/go.mod h1:4Ko2Fryk9BW6NsXY8dDkuQjcQQwrhry1GFQyUptNp1M=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

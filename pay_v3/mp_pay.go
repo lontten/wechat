@@ -1,9 +1,10 @@
-package mp_pay
+package pay_v3
 
 import (
 	"context"
 
 	"github.com/lontten/wechat/pay_v3/pay_model"
+	"github.com/lontten/wechat/wxutil"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/jsapi"
@@ -14,8 +15,8 @@ type MpPayService struct {
 	client    jsapi.JsapiApiService
 }
 
-// MpPayClient 微信小程序支付,调用 微信APP 支付
-func (pc PayConfig) MpPayClient() MpPayService {
+// GetMpPayClient 微信小程序支付,调用 微信APP 支付
+func (pc PayConfig) GetMpPayClient() MpPayService {
 	svc := jsapi.JsapiApiService{Client: pc.coreClient}
 	return MpPayService{
 		client: svc,
@@ -27,22 +28,60 @@ func (pc PayConfig) MpPayClient() MpPayService {
 func (p MpPayService) CreateOrder(o pay_model.Order) (pay_model.PrepayWithRequestPaymentResponse, error) {
 	var res pay_model.PrepayWithRequestPaymentResponse
 	ctx := context.Background()
-	resp, _, err := p.client.PrepayWithRequestPayment(ctx,
-		jsapi.PrepayRequest{
-			Appid:       &p.payConfig.Appid,
-			Mchid:       &p.payConfig.Mchid,
-			Description: o.Description,
-			OutTradeNo:  o.OutTradeNo,
-			Attach:      o.Attach,
-			NotifyUrl:   &p.payConfig.NotifyUrl,
-			Amount: &jsapi.Amount{
-				Total: core.Int64(100),
-			},
-			Payer: &jsapi.Payer{
-				Openid: &o.Openid,
-			},
+	var req = jsapi.PrepayRequest{
+		Appid:       &p.payConfig.Appid,
+		Mchid:       &p.payConfig.Mchid,
+		Description: &o.Description,
+		OutTradeNo:  &o.OutTradeNo,
+		NotifyUrl:   &p.payConfig.NotifyUrl,
+		Amount: &jsapi.Amount{
+			Total: core.Int64(100),
 		},
-	)
+		Payer: &jsapi.Payer{
+			Openid: &o.Openid,
+		},
+		Attach:        &o.Attach,
+		TimeExpire:    o.TimeExpire,
+		GoodsTag:      &o.GoodsTag,
+		SupportFapiao: o.SupportFapiao,
+		Detail:        o.Detail,
+		SceneInfo:     o.SceneInfo,
+		SettleInfo:    o.SettleInfo,
+	}
+	resp, _, err := p.client.PrepayWithRequestPayment(ctx, req)
+	if err != nil {
+		return res, err
+	}
+	res = pay_model.PrepayWithRequestPaymentResponse{
+		TimeStamp: resp.TimeStamp,
+		NonceStr:  resp.NonceStr,
+		Package:   resp.Package,
+		SignType:  resp.SignType,
+		PaySign:   resp.PaySign,
+	}
+	return res, err
+}
+
+// CreateOrderEasy 小程序调起支付
+// https://pay.weixin.qq.com/doc/v3/merchant/4012791897
+func (p MpPayService) CreateOrderEasy(o pay_model.EasyOrder) (pay_model.PrepayWithRequestPaymentResponse, error) {
+	var res pay_model.PrepayWithRequestPaymentResponse
+	ctx := context.Background()
+	var req = jsapi.PrepayRequest{
+		Appid:       &p.payConfig.Appid,
+		Mchid:       &p.payConfig.Mchid,
+		Description: &o.Title,
+		OutTradeNo:  &o.OutTradeNo,
+		NotifyUrl:   &p.payConfig.NotifyUrl,
+		Amount: &jsapi.Amount{
+			Total: core.Int64(wxutil.WxMoneyToFen(o.Money)),
+		},
+		Payer: &jsapi.Payer{
+			Openid: &o.Openid,
+		},
+		Attach: &o.Attach,
+	}
+	resp, _, err := p.client.PrepayWithRequestPayment(ctx, req)
 	if err != nil {
 		return res, err
 	}

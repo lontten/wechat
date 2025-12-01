@@ -1,4 +1,4 @@
-package mp_pay
+package pay_v3
 
 import (
 	"context"
@@ -10,8 +10,8 @@ type RefundService struct {
 	client refunddomestic.RefundsApiService
 }
 
-// RefundClient 退款 申请 通用
-func (pc PayConfig) RefundClient() RefundService {
+// GetRefundClient 退款 申请 通用
+func (pc PayConfig) GetRefundClient() RefundService {
 	svc := refunddomestic.RefundsApiService{Client: pc.coreClient}
 	return RefundService{
 		client: svc,

@@ -1,4 +1,4 @@
-package mp_pay
+package pay_v3
 
 import (
 	"context"
