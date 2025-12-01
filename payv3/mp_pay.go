@@ -1,9 +1,9 @@
-package pay_v3
+package payv3
 
 import (
 	"context"
 
-	"github.com/lontten/wechat/pay_v3/pay_model"
+	"github.com/lontten/wechat/payv3/pay_model"
 	"github.com/lontten/wechat/wxutil"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"

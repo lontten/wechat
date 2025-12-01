@@ -1,4 +1,4 @@
-package pay_v3
+package payv3
 
 import (
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/h5"
