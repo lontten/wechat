@@ -12,5 +12,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/wechatpay-apiv3/wechatpay-go v0.2.21 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 )
