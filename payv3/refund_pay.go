@@ -7,14 +7,16 @@ import (
 )
 
 type RefundService struct {
-	client refunddomestic.RefundsApiService
+	payConfig PayConfig
+	client    refunddomestic.RefundsApiService
 }
 
 // GetRefundClient 退款 申请 通用
 func (pc PayConfig) GetRefundClient() RefundService {
 	svc := refunddomestic.RefundsApiService{Client: pc.coreClient}
 	return RefundService{
-		client: svc,
+		payConfig: pc,
+		client:    svc,
 	}
 }
 

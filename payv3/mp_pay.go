@@ -19,7 +19,8 @@ type MpPayService struct {
 func (pc PayConfig) GetMpPayClient() MpPayService {
 	svc := jsapi.JsapiApiService{Client: pc.coreClient}
 	return MpPayService{
-		client: svc,
+		payConfig: pc,
+		client:    svc,
 	}
 }
 

@@ -5,7 +5,8 @@ import (
 )
 
 type AppPayService struct {
-	client app.AppApiService
+	payConfig PayConfig
+	client    app.AppApiService
 }
 
 // APP支付,调用 微信APP 支付
@@ -13,6 +14,7 @@ func (pc PayConfig) GetAppPayClient() (AppPayService, error) {
 	svc := app.AppApiService{Client: pc.coreClient}
 
 	return AppPayService{
-		client: svc,
+		payConfig: pc,
+		client:    svc,
 	}, nil
 }
