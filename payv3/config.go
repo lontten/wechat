@@ -2,6 +2,7 @@ package payv3
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
@@ -23,11 +24,11 @@ type PayConfig struct {
 	coreClient *core.Client
 }
 
-func (pc PayConfig) InitClient() error {
+func (pc *PayConfig) Init() {
 	ctx := context.Background()
 	mchPrivateKey, err := utils.LoadPrivateKeyWithPath(pc.PrivateKeyPath)
 	if err != nil {
-		return err
+		panic(fmt.Errorf("加载私钥失败: %v", err))
 	}
 
 	// 使用商户私钥等初始化 client，并使它具有自动定时获取微信支付平台证书的能力
@@ -36,8 +37,7 @@ func (pc PayConfig) InitClient() error {
 	}
 	client, err := core.NewClient(ctx, opts...)
 	if err != nil {
-		return err
+		panic(fmt.Errorf("初始化微信支付client失败: %v", err))
 	}
 	pc.coreClient = client
-	return nil
 }

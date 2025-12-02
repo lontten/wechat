@@ -10,11 +10,6 @@ type AppPayService struct {
 
 // APP支付,调用 微信APP 支付
 func (pc PayConfig) GetAppPayClient() (AppPayService, error) {
-	var payService AppPayService
-	err := pc.InitClient()
-	if err != nil {
-		return payService, err
-	}
 	svc := app.AppApiService{Client: pc.coreClient}
 
 	return AppPayService{
