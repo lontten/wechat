@@ -36,7 +36,8 @@ func (p MpPayService) CreateOrder(o pay_model.Order) (pay_model.PrepayWithReques
 		OutTradeNo:  &o.OutTradeNo,
 		NotifyUrl:   &p.payConfig.NotifyUrl,
 		Amount: &jsapi.Amount{
-			Total: core.Int64(100),
+			Total:    &o.Amount.Total,
+			Currency: o.Amount.Currency,
 		},
 		Payer: &jsapi.Payer{
 			Openid: &o.Openid,
