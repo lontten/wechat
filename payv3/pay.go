@@ -47,7 +47,7 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 			TimeStamp:  types.NilToZero(resp.TimeStamp),
 			NonceStr:   types.NilToZero(resp.NonceStr),
 			Package:    types.NilToZero(resp.Package),
-			Sign:       types.NilToZero(resp.Sign),
+			PaySign:    types.NilToZero(resp.Sign),
 			OutTradeNo: o.OutTradeNo,
 		}
 		return res, err
@@ -102,7 +102,7 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 			NonceStr:   types.NilToZero(resp.NonceStr),
 			Package:    types.NilToZero(resp.Package),
 			SignType:   types.NilToZero(resp.SignType),
-			Sign:       types.NilToZero(resp.PaySign),
+			PaySign:    types.NilToZero(resp.PaySign),
 			OutTradeNo: o.OutTradeNo,
 		}
 		return res, err

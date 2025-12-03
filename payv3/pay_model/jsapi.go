@@ -15,7 +15,7 @@ type PrepayWithRequestPaymentResponse struct {
 	// 签名方式
 	SignType string `json:"signType"`
 	// 签名
-	Sign string `json:"sign"`
+	PaySign string `json:"paySign"`
 
 	// 二维码链接
 	CodeUrl string `json:"codeUrl"`
