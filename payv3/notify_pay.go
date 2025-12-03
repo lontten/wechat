@@ -9,10 +9,10 @@ import (
 )
 
 // PayNotify 支付回调通知 通用
-func (p WxPayService) PayNotify(req *http.Request) (*payments.Transaction, error) {
+func (p WxPayService) PayNotify(req *http.Request) (payments.Transaction, error) {
 	ctx := context.Background()
-	transaction := new(payments.Transaction)
-	_, err := p.notifyClient.ParseNotifyRequest(ctx, req, transaction)
+	transaction := payments.Transaction{}
+	_, err := p.notifyClient.ParseNotifyRequest(ctx, req, &transaction)
 	if err != nil {
 		log.Printf("❌ 回调处理失败: %s", err)
 		return transaction, err
