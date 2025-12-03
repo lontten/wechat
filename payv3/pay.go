@@ -7,7 +7,7 @@ import (
 	"github.com/lontten/lcore/v2/jsonutil"
 	"github.com/lontten/lcore/v2/types"
 	"github.com/lontten/wechat/payv3/pay_model"
-	"github.com/lontten/wechat/payv3/wxpay_type"
+	"github.com/lontten/wechat/payv3/wxpay"
 	"github.com/lontten/wechat/wxutil"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/app"
@@ -27,12 +27,12 @@ func (pc PayConfig) GetMpPayClient() WxPayService {
 
 // CreateOrder 调起支付
 // https://pay.weixin.qq.com/doc/v3/merchant/4012791897
-func (p WxPayService) CreateOrder(typ wxpay_type.WxPayType, o pay_model.Order) (pay_model.PrepayWithRequestPaymentResponse, error) {
+func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_model.PrepayWithRequestPaymentResponse, error) {
 	var res pay_model.PrepayWithRequestPaymentResponse
 	ctx := context.Background()
 
 	switch typ {
-	case wxpay_type.APP:
+	case wxpay.APP:
 		req := jsonutil.ToObj[app.PrepayRequest](jsonutil.ToJsonStr(o.SceneInfo))
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
@@ -51,7 +51,7 @@ func (p WxPayService) CreateOrder(typ wxpay_type.WxPayType, o pay_model.Order) (
 			OutTradeNo: o.OutTradeNo,
 		}
 		return res, err
-	case wxpay_type.Pc_Web:
+	case wxpay.Pc_Web:
 		req := jsonutil.ToObj[native.PrepayRequest](jsonutil.ToJsonStr(o.SceneInfo))
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
@@ -68,7 +68,7 @@ func (p WxPayService) CreateOrder(typ wxpay_type.WxPayType, o pay_model.Order) (
 		}
 		return res, err
 
-	case wxpay_type.Phone_Web:
+	case wxpay.Phone_Web:
 		req := jsonutil.ToObj[h5.PrepayRequest](jsonutil.ToJsonStr(o.SceneInfo))
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
@@ -83,7 +83,7 @@ func (p WxPayService) CreateOrder(typ wxpay_type.WxPayType, o pay_model.Order) (
 			OutTradeNo: o.OutTradeNo,
 		}
 		return res, err
-	case wxpay_type.MiniProgram, wxpay_type.Wx_Web:
+	case wxpay.MiniProgram, wxpay.Wx_Web:
 		req := jsonutil.ToObj[jsapi.PrepayRequest](jsonutil.ToJsonStr(o.SceneInfo))
 		req.Payer = &jsapi.Payer{
 			Openid: &o.Openid,
@@ -114,7 +114,7 @@ func (p WxPayService) CreateOrder(typ wxpay_type.WxPayType, o pay_model.Order) (
 
 // CreateOrderEasy 调起支付
 // https://pay.weixin.qq.com/doc/v3/merchant/4012791897
-func (p WxPayService) CreateOrderEasy(typ wxpay_type.WxPayType, o pay_model.EasyOrder) (pay_model.PrepayWithRequestPaymentResponse, error) {
+func (p WxPayService) CreateOrderEasy(typ wxpay.WxPayType, o pay_model.EasyOrder) (pay_model.PrepayWithRequestPaymentResponse, error) {
 	var req = pay_model.Order{
 		Description: o.Title,
 		OutTradeNo:  o.OutTradeNo,

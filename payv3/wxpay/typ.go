@@ -1,4 +1,4 @@
-package wxpay_type
+package wxpay
 
 type WxPayType int
 
