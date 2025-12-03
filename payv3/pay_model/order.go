@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
-	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/jsapi"
 )
 
 type Order struct {
@@ -34,11 +33,11 @@ type Order struct {
 	SupportFapiao *bool `json:"support_fapiao,omitempty"`
 
 	// 选填：【优惠功能】 优惠功能
-	Detail *jsapi.Detail `json:"detail,omitempty"`
+	Detail *Detail `json:"detail,omitempty"`
 	// 选填：场景信息
-	SceneInfo *jsapi.SceneInfo `json:"scene_info,omitempty"`
+	SceneInfo *SceneInfo `json:"scene_info,omitempty"`
 	// 选填：【结算信息】 结算信息
-	SettleInfo *jsapi.SettleInfo `json:"settle_info,omitempty"`
+	SettleInfo *SettleInfo `json:"settle_info,omitempty"`
 }
 
 type EasyOrder struct {

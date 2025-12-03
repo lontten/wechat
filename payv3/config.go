@@ -1,43 +1,20 @@
 package payv3
 
 import (
-	"context"
-	"fmt"
-
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
-	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
-	"github.com/wechatpay-apiv3/wechatpay-go/utils"
 )
 
 type PayConfig struct {
-	Appid string `json:"appid"` // 小程序 appId
-	Mchid string `json:"mchid"` // 商户号
+	Appid string `json:"appid"`
 
-	MchAPIv3Key    string `json:"mch_api_v3_key"`   // 商户 APIv3 密钥
-	PrivateKeyPath string `json:"private_key_path"` // 商户私钥文件路径 /path/to/merchant/apiclient_key.pem
-
+	Mchid                      string `json:"mchid"`                         // 商户号
 	MchCertificateSerialNumber string `json:"mch_certificate_serial_number"` // 商户证书序列号
+	PrivateKeyPath             string `json:"private_key_path"`              // 商户私钥文件路径 /path/to/merchant/apiclient_key.pem
+
+	MchAPIv3Key string `json:"mch_api_v3_key"` // 商户 APIv3 密钥
 
 	// 有效性：1. HTTPS；2. 不允许携带查询串。
 	NotifyUrl string `json:"notify_url"`
 
 	coreClient *core.Client
-}
-
-func (pc *PayConfig) Init() {
-	ctx := context.Background()
-	mchPrivateKey, err := utils.LoadPrivateKeyWithPath(pc.PrivateKeyPath)
-	if err != nil {
-		panic(fmt.Errorf("加载私钥失败: %v", err))
-	}
-
-	// 使用商户私钥等初始化 client，并使它具有自动定时获取微信支付平台证书的能力
-	opts := []core.ClientOption{
-		option.WithWechatPayAutoAuthCipher(pc.Mchid, pc.MchCertificateSerialNumber, mchPrivateKey, pc.MchAPIv3Key),
-	}
-	client, err := core.NewClient(ctx, opts...)
-	if err != nil {
-		panic(fmt.Errorf("初始化微信支付client失败: %v", err))
-	}
-	pc.coreClient = client
 }
