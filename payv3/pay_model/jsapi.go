@@ -25,7 +25,7 @@ type PrepayWithRequestPaymentResponse struct {
 	// 本地数据库 订单id
 	OrderId string `json:"orderId"`
 	// 本地数据库 订单号
-	OutTradeNo string
+	OutTradeNo string `json:"outTradeNo"`
 }
 type QueryOrderByIdRequest struct {
 	TransactionId *string `json:"transaction_id"`
