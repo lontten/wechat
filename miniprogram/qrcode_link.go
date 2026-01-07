@@ -55,15 +55,12 @@ func (c MiniProgramConfig) CreateQRCode(req CreateQRCodeReq) (GetQRCodeResp, err
 	}
 	url += "?access_token=" + accessToken
 
-	if req.Width == 0 {
-		req.Width = 430
-	}
 	return netutil.PostJson[GetQRCodeResp](url, req)
 }
 
 type GetUnlimitedQRCodeReq struct {
 	Scene     string `json:"scene"`                // 是	最大32个可见字符，只支持数字，大小写英文以及部分特殊字符
-	Path      string `json:"path"`                 // 是	默认是主页，页面 page，例如 pages/index/index
+	Path      string `json:"path,omitempty"`       // 否	默认是主页，页面 page，例如 pages/index/index
 	CheckPath *bool  `json:"check_path,omitempty"` // 否	默认是true，检查page 是否存在，为 true 时 page 必须是已经发布的小程序存在的页面（否则报错）；为 false 时允许小程序未发布或者 page 不存在， 但page 有数量上限（60000个）请勿滥用。
 
 	Width      int    `json:"width,omitempty"`       // 否	二维码的宽度，单位 px。默认值为430，最小 280px，最大 1280px
