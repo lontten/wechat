@@ -69,9 +69,6 @@ func (c MiniProgramConfig) CreateQRCode(req CreateQRCodeReq) (GetQRCodeResp, err
 	if err != nil {
 		return GetQRCodeResp{}, err
 	}
-	if body == nil {
-		return result, nil
-	}
 	result.Buffer = body
 	return result, nil
 }
@@ -92,7 +89,7 @@ type GetUnlimitedQRCodeReq struct {
 // 永久有效，数量暂无限制
 // https://developers.weixin.qq.com/miniprogram/dev/server/API/qrcode-link/qr-code/api_getunlimitedqrcode.html
 func (c MiniProgramConfig) GetUnlimitedQRCode(req GetUnlimitedQRCodeReq) (GetQRCodeResp, error) {
-	url := "https://api.weixin.qq.com/wxa/getwxacode"
+	url := "https://api.weixin.qq.com/wxa/getwxacodeunlimit"
 	accessToken, err := c.GetAccessTokenCache()
 	if err != nil {
 		return GetQRCodeResp{}, err
