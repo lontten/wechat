@@ -1,6 +1,8 @@
 package miniprogram
 
-import "github.com/lontten/lcore/v2/netutil"
+import (
+	"github.com/lontten/lutil/netutil"
+)
 
 type GetQRCodeReq struct {
 	Path       string `json:"path"`                  // 是	扫码进入的小程序页面路径，最大长度 1024 个字符，不能为空
@@ -35,7 +37,15 @@ func (c MiniProgramConfig) GetQRCode(req GetQRCodeReq) (GetQRCodeResp, error) {
 	}
 	url += "?access_token=" + accessToken
 
-	return netutil.PostJson[GetQRCodeResp](url, req)
+	body, result, err := netutil.PostJsonByteOk[GetQRCodeResp](url, req)
+	if err != nil {
+		return GetQRCodeResp{}, err
+	}
+	if body == nil {
+		return result, nil
+	}
+	result.Buffer = body
+	return result, nil
 }
 
 type CreateQRCodeReq struct {
@@ -55,7 +65,15 @@ func (c MiniProgramConfig) CreateQRCode(req CreateQRCodeReq) (GetQRCodeResp, err
 	}
 	url += "?access_token=" + accessToken
 
-	return netutil.PostJson[GetQRCodeResp](url, req)
+	body, result, err := netutil.PostJsonByteOk[GetQRCodeResp](url, req)
+	if err != nil {
+		return GetQRCodeResp{}, err
+	}
+	if body == nil {
+		return result, nil
+	}
+	result.Buffer = body
+	return result, nil
 }
 
 type GetUnlimitedQRCodeReq struct {
@@ -81,5 +99,13 @@ func (c MiniProgramConfig) GetUnlimitedQRCode(req GetUnlimitedQRCodeReq) (GetQRC
 	}
 	url += "?access_token=" + accessToken
 
-	return netutil.PostJson[GetQRCodeResp](url, req)
+	body, result, err := netutil.PostJsonByteOk[GetQRCodeResp](url, req)
+	if err != nil {
+		return GetQRCodeResp{}, err
+	}
+	if body == nil {
+		return result, nil
+	}
+	result.Buffer = body
+	return result, nil
 }
