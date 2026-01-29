@@ -1,7 +1,7 @@
 package miniprogram
 
 import (
-	"github.com/lontten/lcore/v2/netutil"
+	"github.com/lontten/lutil/netutil"
 )
 
 type Code2SessionResp struct {

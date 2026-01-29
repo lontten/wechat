@@ -3,7 +3,7 @@ package miniprogram
 import (
 	"fmt"
 
-	"github.com/lontten/lcore/v2/netutil"
+	"github.com/lontten/lutil/netutil"
 )
 
 type GetAccessTokenResp struct {
