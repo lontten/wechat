@@ -47,7 +47,7 @@ func (c MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccess
 		GrantType:    "client_credential",
 		ForceRefresh: false,
 	}
-	return netutil.PostJson[GetAccessTokenResp](url, data)
+	return netutil.PostJsonOk[GetAccessTokenResp](url, data)
 }
 
 func (c MiniProgramConfig) GetAccessTokenCache() (string, error) {

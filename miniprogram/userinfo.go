@@ -44,5 +44,5 @@ func (c MiniProgramConfig) GetPhoneNumber(code string, openid ...string) (GetPho
 	if len(openid) > 0 {
 		data.OpenID = openid[0]
 	}
-	return netutil.PostJson[GetPhoneNumberResp](url, data)
+	return netutil.PostJsonOk[GetPhoneNumberResp](url, data)
 }
