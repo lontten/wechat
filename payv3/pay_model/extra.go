@@ -30,6 +30,8 @@ type SceneInfo struct {
 	// 商户端设备号
 	DeviceId  *string    `json:"device_id,omitempty"`
 	StoreInfo *StoreInfo `json:"store_info,omitempty"`
+
+	H5Info *H5Info `json:"h5_info"`
 }
 
 // StoreInfo 商户门店信息
@@ -48,4 +50,18 @@ type StoreInfo struct {
 type SettleInfo struct {
 	// 是否指定分账
 	ProfitSharing *bool `json:"profit_sharing,omitempty"`
+}
+
+// H5Info
+type H5Info struct {
+	// 场景类型
+	Type *string `json:"type"`
+	// 应用名称
+	AppName *string `json:"app_name,omitempty"`
+	// 网站URL
+	AppUrl *string `json:"app_url,omitempty"`
+	// iOS平台BundleID
+	BundleId *string `json:"bundle_id,omitempty"`
+	// Android平台PackageName
+	PackageName *string `json:"package_name,omitempty"`
 }
