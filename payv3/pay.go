@@ -33,7 +33,14 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 
 	switch typ {
 	case wxpay.APP:
-		req := jsonutil.ToObj[app.PrepayRequest](jsonutil.ToJsonStr(o))
+		jsonStr, err := jsonutil.ToJsonStr(o)
+		if err != nil {
+			return res, err
+		}
+		req, err := jsonutil.ToObj[app.PrepayRequest](jsonStr)
+		if err != nil {
+			return res, err
+		}
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
 		req.NotifyUrl = &p.payConfig.NotifyUrl
@@ -52,7 +59,14 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 		}
 		return res, err
 	case wxpay.Pc_Web:
-		req := jsonutil.ToObj[native.PrepayRequest](jsonutil.ToJsonStr(o))
+		jsonStr, err := jsonutil.ToJsonStr(o)
+		if err != nil {
+			return res, err
+		}
+		req, err := jsonutil.ToObj[native.PrepayRequest](jsonStr)
+		if err != nil {
+			return res, err
+		}
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
 		req.NotifyUrl = &p.payConfig.NotifyUrl
@@ -69,7 +83,14 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 		return res, err
 
 	case wxpay.Phone_Web:
-		req := jsonutil.ToObj[h5.PrepayRequest](jsonutil.ToJsonStr(o))
+		jsonStr, err := jsonutil.ToJsonStr(o)
+		if err != nil {
+			return res, err
+		}
+		req, err := jsonutil.ToObj[h5.PrepayRequest](jsonStr)
+		if err != nil {
+			return res, err
+		}
 		req.Appid = &p.payConfig.Appid
 		req.Mchid = &p.payConfig.Mchid
 		req.NotifyUrl = &p.payConfig.NotifyUrl
@@ -84,7 +105,14 @@ func (p WxPayService) CreateOrder(typ wxpay.WxPayType, o pay_model.Order) (pay_m
 		}
 		return res, err
 	case wxpay.MiniProgram, wxpay.Wx_Web:
-		req := jsonutil.ToObj[jsapi.PrepayRequest](jsonutil.ToJsonStr(o))
+		jsonStr, err := jsonutil.ToJsonStr(o)
+		if err != nil {
+			return res, err
+		}
+		req, err := jsonutil.ToObj[jsapi.PrepayRequest](jsonStr)
+		if err != nil {
+			return res, err
+		}
 		req.Payer = &jsapi.Payer{
 			Openid: &o.Openid,
 		}
