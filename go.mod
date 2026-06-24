@@ -4,8 +4,8 @@ go 1.25.0
 
 require (
 	github.com/dgraph-io/ristretto v0.2.0
-	github.com/lontten/lcore/v2 v2.23.0
-	github.com/lontten/lutil v0.2.3
+	github.com/lontten/lcore/v2 v2.23.1
+	github.com/lontten/lutil v0.3.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/wechatpay-apiv3/wechatpay-go v0.2.21
 )
