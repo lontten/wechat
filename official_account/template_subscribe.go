@@ -36,6 +36,10 @@ type TemplateSubscribeResp struct {
 	ErrMsg  string `json:"errmsg"`  // 错误信息，请求失败时返回
 }
 
+func (r TemplateSubscribeResp) Ok() bool {
+	return r.ErrCode == 0
+}
+
 // TemplateSubscribe 发送一次性订阅消息
 // 推送订阅模板消息给授权微信用户
 // 服务号、移动应用
