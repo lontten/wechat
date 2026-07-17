@@ -28,8 +28,8 @@ func (c ServiceAccountConfig) GetAccessToken() (GetAccessTokenResp, error) {
 }
 
 type GetStableAccessTokenReq struct {
-	Appid     string `json:"appid"`      // 小程序 appId
-	Secret    string `json:"secret"`     // 小程序 appSecret
+	Appid     string `json:"appid"`      // 服务号 appId
+	Secret    string `json:"secret"`     // 服务号 appSecret
 	GrantType string `json:"grant_type"` // 填写 client_credential
 	// 默认使用 false。
 	// 1. force_refresh = false 时为普通调用模式，access_token 有效期内重复调用该接口不会更新 access_token；
@@ -43,10 +43,12 @@ type GetStableAccessTokenReq struct {
 func (c ServiceAccountConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccessTokenResp, error) {
 	url := "https://api.weixin.qq.com/cgi-bin/stable_token"
 	var data = GetStableAccessTokenReq{
-		Appid:        c.Appid,
-		Secret:       c.Secret,
-		GrantType:    "client_credential",
-		ForceRefresh: false,
+		Appid:     c.Appid,
+		Secret:    c.Secret,
+		GrantType: "client_credential",
+	}
+	if len(forceRefresh) > 0 {
+		data.ForceRefresh = forceRefresh[0]
 	}
 	return netutil.PostJsonOk[GetAccessTokenResp](url, data)
 }

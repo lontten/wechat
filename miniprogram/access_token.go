@@ -42,10 +42,12 @@ type GetStableAccessTokenReq struct {
 func (c MiniProgramConfig) GetStableAccessToken(forceRefresh ...bool) (GetAccessTokenResp, error) {
 	url := "https://api.weixin.qq.com/cgi-bin/stable_token"
 	var data = GetStableAccessTokenReq{
-		Appid:        c.Appid,
-		Secret:       c.Secret,
-		GrantType:    "client_credential",
-		ForceRefresh: false,
+		Appid:     c.Appid,
+		Secret:    c.Secret,
+		GrantType: "client_credential",
+	}
+	if len(forceRefresh) > 0 {
+		data.ForceRefresh = forceRefresh[0]
 	}
 	return netutil.PostJsonOk[GetAccessTokenResp](url, data)
 }

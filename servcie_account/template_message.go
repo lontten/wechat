@@ -11,9 +11,9 @@ import (
 // 当用户的微信客户端版本不支持跳小程序时，将会跳转至url。
 type SendTemplateMessageReq struct {
 	ToUser     string `json:"touser"`      // 是	接收消息的用户openid
-	TemplateId string `json:"template_id"` // 是	订阅消息模板ID
+	TemplateId string `json:"template_id"` // 是	模板消息模板ID
 
-	Url         string       `json:"url,omitempty"`         // 否	模板跳转链接（海外账号没有跳转能力
+	Url         string       `json:"url,omitempty"`         // 否	模板跳转链接（海外账号没有跳转能力）
 	MiniProgram *MiniProgram `json:"miniprogram,omitempty"` // 否	跳小程序配置
 
 	Data map[string]ValueContent `json:"data"` // 是	模板内容，需根据模板给定的格式给出（参考注意事项），格式形如 { "key1": { "value": any }, "key2": { "value": any } }
@@ -25,7 +25,10 @@ type ValueContent struct {
 }
 
 func (r *SendTemplateMessageReq) PushData(k, v string) {
-	r.Data[k] = ValueContent{v}
+	if r.Data == nil {
+		r.Data = make(map[string]ValueContent)
+	}
+	r.Data[k] = ValueContent{Value: v}
 }
 
 type SendTemplateMessageResp struct {

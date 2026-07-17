@@ -17,7 +17,7 @@ func ServiceAccount(mpc ServiceAccountConfig) ServiceAccountConfig {
 }
 
 func (c ServiceAccountConfig) CacheKeyAccessToken() string {
-	return "official_account_access_token_" + c.Appid
+	return "service_account_access_token_" + c.Appid
 }
 
 func (c ServiceAccountConfig) Get(key string) (any, bool) {

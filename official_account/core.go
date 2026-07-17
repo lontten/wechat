@@ -3,8 +3,8 @@ package official_account
 import "github.com/lontten/wechat/cache"
 
 type OfficialAccountConfig struct {
-	Appid  string `json:"appid"`  // 小程序 appId
-	Secret string `json:"secret"` // 小程序 appSecret
+	Appid  string `json:"appid"`  // 公众号 appId
+	Secret string `json:"secret"` // 公众号 appSecret
 
 	Cache cache.Cacher
 }
