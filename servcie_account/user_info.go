@@ -2,7 +2,9 @@ package service_account
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/lontten/lcore/v2/types"
 	"github.com/lontten/lutil/netutil"
 )
 
@@ -83,27 +85,74 @@ func (c ServiceAccountConfig) GetAllFansEach(handler func(openid string, total i
 }
 
 type UserInfo struct {
-	Subscribe      int    `json:"subscribe"`       // 用户是否订阅该公众号标识，值为0时代表未关注，拉取不到其余信息
-	Openid         string `json:"openid"`          // 用户的标识，对当前公众号唯一
-	Language       string `json:"language"`        // 【注意：该字段不再提供】用户的语言，简体中文为zh_CN
-	SubscribeTime  int64  `json:"subscribe_time"`  // 用户关注时间，为时间戳；若曾多次关注则取最后关注时间
-	Unionid        string `json:"unionid"`         // 只有在用户将公众号绑定到微信开放平台账号后才会出现
-	Remark         string `json:"remark"`          // 公众号运营者对粉丝的备注
-	Groupid        int    `json:"groupid"`         // 用户所在的分组ID（兼容旧的用户分组接口）
-	TagidList      []int  `json:"tagid_list"`      // 用户被打上的标签ID列表
-	SubscribeScene string `json:"subscribe_scene"` // 用户关注的渠道来源
-	QrScene        int    `json:"qr_scene"`        // 二维码扫码场景（开发者自定义）
-	QrSceneStr     string `json:"qr_scene_str"`    // 二维码扫码场景描述（开发者自定义）
+	Subscribe      int                 // 用户是否订阅该公众号标识，值为0时代表未关注，拉取不到其余信息
+	Openid         string              // 用户的标识，对当前公众号唯一
+	Language       string              // 【注意：该字段不再提供】用户的语言，简体中文为zh_CN
+	SubscribeTime  types.LocalDateTime // 用户关注时间；若曾多次关注则取最后关注时间
+	Unionid        string              // 只有在用户将公众号绑定到微信开放平台账号后才会出现
+	Remark         string              // 公众号运营者对粉丝的备注
+	Groupid        int                 // 用户所在的分组ID（兼容旧的用户分组接口）
+	TagidList      []int               // 用户被打上的标签ID列表
+	SubscribeScene string              // 用户关注的渠道来源
+	QrScene        int                 // 二维码扫码场景（开发者自定义）
+	QrSceneStr     string              // 二维码扫码场景描述（开发者自定义）
+}
+
+type userInfoRaw struct {
+	Subscribe      int    `json:"subscribe"`
+	Openid         string `json:"openid"`
+	Language       string `json:"language"`
+	SubscribeTime  int64  `json:"subscribe_time"`
+	Unionid        string `json:"unionid"`
+	Remark         string `json:"remark"`
+	Groupid        int    `json:"groupid"`
+	TagidList      []int  `json:"tagid_list"`
+	SubscribeScene string `json:"subscribe_scene"`
+	QrScene        int    `json:"qr_scene"`
+	QrSceneStr     string `json:"qr_scene_str"`
+}
+
+func toUserInfo(r userInfoRaw) UserInfo {
+	info := UserInfo{
+		Subscribe:      r.Subscribe,
+		Openid:         r.Openid,
+		Language:       r.Language,
+		Unionid:        r.Unionid,
+		Remark:         r.Remark,
+		Groupid:        r.Groupid,
+		TagidList:      r.TagidList,
+		SubscribeScene: r.SubscribeScene,
+		QrScene:        r.QrScene,
+		QrSceneStr:     r.QrSceneStr,
+	}
+	if r.SubscribeTime != 0 {
+		info.SubscribeTime = types.LocalDateTimeOfLoc(time.Unix(r.SubscribeTime, 0))
+	}
+	return info
 }
 
 type UserInfoResp struct {
-	ErrCode int    `json:"errcode"` // 错误码，请求失败时返回, 0 表示成功
-	ErrMsg  string `json:"errmsg"`  // 错误信息，请求失败时返回
+	ErrCode int    // 错误码，请求失败时返回, 0 表示成功
+	ErrMsg  string // 错误信息，请求失败时返回
 	UserInfo
+}
+
+type userInfoRespRaw struct {
+	ErrCode int    `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
+	userInfoRaw
 }
 
 func (r UserInfoResp) Ok() bool {
 	return r.ErrCode == 0
+}
+
+func toUserInfoResp(r userInfoRespRaw) UserInfoResp {
+	return UserInfoResp{
+		ErrCode:  r.ErrCode,
+		ErrMsg:   r.ErrMsg,
+		UserInfo: toUserInfo(r.userInfoRaw),
+	}
 }
 
 // UserInfo 获取用户基本信息
@@ -121,7 +170,11 @@ func (c ServiceAccountConfig) UserInfo(openid string, lang ...string) (UserInfoR
 	if len(lang) > 0 && lang[0] != "" {
 		url += "&lang=" + lang[0]
 	}
-	return netutil.Get[UserInfoResp](url)
+	raw, err := netutil.Get[userInfoRespRaw](url)
+	if err != nil {
+		return UserInfoResp{}, err
+	}
+	return toUserInfoResp(raw), nil
 }
 
 type BatchUserinfoItem struct {
@@ -134,14 +187,32 @@ type BatchUserinfoReq struct {
 }
 
 type BatchUserinfoResp struct {
-	ErrCode int    `json:"errcode"` // 错误码，请求失败时返回, 0 表示成功
-	ErrMsg  string `json:"errmsg"`  // 错误信息，请求失败时返回
+	ErrCode int    // 错误码，请求失败时返回, 0 表示成功
+	ErrMsg  string // 错误信息，请求失败时返回
 
-	UserInfoList []UserInfo `json:"user_info_list"` // 用户列表
+	UserInfoList []UserInfo // 用户列表
+}
+
+type batchUserinfoRespRaw struct {
+	ErrCode      int           `json:"errcode"`
+	ErrMsg       string        `json:"errmsg"`
+	UserInfoList []userInfoRaw `json:"user_info_list"`
 }
 
 func (r BatchUserinfoResp) Ok() bool {
 	return r.ErrCode == 0
+}
+
+func toBatchUserinfoResp(r batchUserinfoRespRaw) BatchUserinfoResp {
+	list := make([]UserInfo, len(r.UserInfoList))
+	for i, item := range r.UserInfoList {
+		list[i] = toUserInfo(item)
+	}
+	return BatchUserinfoResp{
+		ErrCode:      r.ErrCode,
+		ErrMsg:       r.ErrMsg,
+		UserInfoList: list,
+	}
 }
 
 // BatchUserinfo 批量获取用户基本信息
@@ -154,5 +225,9 @@ func (c ServiceAccountConfig) BatchUserinfo(userList []BatchUserinfoItem) (Batch
 		return BatchUserinfoResp{}, err
 	}
 	url += "?access_token=" + accessToken
-	return netutil.PostJsonOk[BatchUserinfoResp](url, BatchUserinfoReq{UserList: userList})
+	raw, err := netutil.PostJsonOk[batchUserinfoRespRaw](url, BatchUserinfoReq{UserList: userList})
+	if err != nil {
+		return BatchUserinfoResp{}, err
+	}
+	return toBatchUserinfoResp(raw), nil
 }
